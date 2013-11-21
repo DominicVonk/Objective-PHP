@@ -281,10 +281,10 @@ class ArrayList extends Object {
 	public function exists ($v) {
 		foreach(parent::get() as $a) {
 			if ($a == $v) {
-				return true;
+				return new Boolean(true);
 			}
 		}
-		return false;
+		return new Boolean(false);
 	}
 	public function push($v) {
 		$a = parent::get();
