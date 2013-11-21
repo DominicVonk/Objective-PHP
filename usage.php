@@ -35,6 +35,10 @@ $arrayList = new ArrayList("hello", "welcome", "to","objective", "php");
       echo " " . $word;
     }
   });
-  echo ".";
+  echo ".<br />";
+
+for($i = new Number(0); $i->get() < 20; $i->increment()) {
+	echo $i->multiply(10)->add(1) . "<br />";
+}
 
 ?>
