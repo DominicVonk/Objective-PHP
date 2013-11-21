@@ -4,10 +4,7 @@ include_once 'objective.php';
 $hello = new String("hello people!");
 echo $hello->toCaptialize() . "<br />";
 
-$words = $hello->split(' ');
-$words->each(function($word) { echo $word . "<br />"; });
-
-$words->contains("hello")->isTrue(
+$hello->contains("hello")->isTrue(
 function() { /* if true */
   echo "YEAH it does contain hello";
 }, 
@@ -16,7 +13,12 @@ function() { /* else */
 });
 echo "<br />";
 
-$words->contains("people")->equals(true, 
+$words = $hello->split(' ');
+$words->each(function($word) { echo $word . "<br />"; });
+
+
+
+$words->exists("people")->equals(true, 
 function() { /* if true */
   echo "It does contain people"; 
 },
