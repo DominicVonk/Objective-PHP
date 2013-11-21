@@ -1,11 +1,15 @@
 <?php
 class Object {
-	protected $data;
+	protected $data, $type;
 	public function __construct() {
 		$this->data = array();
+		$this->type = "object";
 	}
 	public function __set($var, $val) {
 		$this->data[$var] = $val;
+	}
+	public function type() {
+		return $this->type;
 	}
 	public function __get($var) {
 		if (!empty($this->data[$var])) {
@@ -14,7 +18,15 @@ class Object {
 		else {
 			throw new Exception("Variable: '" . $var . "' doesn't exists.");
 		}
-	} 
+	}
+	public function length() {
+		if (is_string($this->data)) {
+			return new Number(strlen($this->data));
+		}
+		else {
+			return new Number(count($this->data));
+		}
+	}
 	public function __call($var, $args) {
 		if (is_callable($this->data[$var])) {
 			return call_user_func_array($this->data[$var], $args);
@@ -52,7 +64,9 @@ class Object {
 	public function set($val) {
 		$this->data = $val;
 	}
-
+	protected function setType($val) {
+		$this->type = $val;
+	}
 	public function get() {
 		return $this->data;
 	}
@@ -61,6 +75,7 @@ class Object {
 class Boolean extends Object {
 	public function __construct($val) {
 		parent::set($val);
+		parent::setType("boolean");
 	}
 	public function isFalse($then = null, $else = null) {
 		if ($then !== null || $else !== null) {
@@ -106,6 +121,7 @@ class Boolean extends Object {
 class Number extends Object {
 	public function __construct($val) {
 		parent::set(floatval($val));
+		parent::setType("number");
 	}
 	public function add($by = 1) {
 		return new Number(parent::get() + $by);
@@ -148,6 +164,18 @@ class Number extends Object {
 	public function floor($decimals = 0) {
 		return new Number(floor(parent::get(), $decimals)+0);
 	}
+	public function count($func, $from = 0, $steps = 1) {
+		for($i = $from; $i <= parent::get(); $i++) {
+			$func($i);
+			$i += $steps-1;
+		}
+	}
+	public function countDown($func, $to = 0, $steps = 1) {
+		for ($i = parent::get(); $i >= $to; $i--) {
+			$func($i);
+			$i -= $steps-1;
+		}
+	}
 	public function ceil($decimals = 0) {
 		return new Number(ceil(parent::get(), $decimals)+0);
 	}
@@ -157,6 +185,7 @@ class Number extends Object {
 }
 class String extends Object {
 	public function __construct($val) {
+		parent::setType("string");
 		parent::set(strval($val));
 	}
 	public function replace($search, $replace, $ci = true, $times = 0) {
@@ -272,6 +301,7 @@ class ArrayList extends Object {
 		else {
 			$vars = func_get_args();
 		}
+		parent::setType("arraylist");
 		parent::set($vars);
 	}
 	public function getChild($i) {
@@ -311,4 +341,3 @@ class ArrayList extends Object {
 		}
 	}
 }
-?>
