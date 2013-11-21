@@ -29,7 +29,7 @@ echo "<br />";
 $arrayList = new ArrayList("hello", "welcome", "to","objective", "php");
 $arrayList->exists("hello")->isTrue(function() {
 	global $arrayList;
-	$arrayList->each(function($word) {
+	$arrayList->each(function($word){
 		if ($word == "hello") {
 			$s = new String($word);
 			echo $s->toCaptialize() . ",";
