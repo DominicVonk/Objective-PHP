@@ -19,6 +19,26 @@ class Object {
 			throw new Exception("Variable: '" . $var . "' doesn't exists.");
 		}
 	}
+	public function isType($type, $then = null, $else = null) {
+		if ($then !== null || $else !== null) {
+			if ($else === null) {
+				if ($this->type === $type){
+					$then();
+				}
+			}
+			else {
+				if ($this->type === $type){
+					$then();
+				}
+				else {
+					$else();
+				}
+			}
+		}
+		else {
+			return ($this->data === $val);
+		}
+	}
 	public function length() {
 		if (is_string($this->data)) {
 			return new Number(strlen($this->data));
@@ -166,13 +186,13 @@ class Number extends Object {
 	}
 	public function count($func, $from = 0, $steps = 1) {
 		for($i = $from; $i <= parent::get(); $i++) {
-			$func($i);
+			$func(new Number($i));
 			$i += $steps-1;
 		}
 	}
 	public function countDown($func, $to = 0, $steps = 1) {
 		for ($i = parent::get(); $i >= $to; $i--) {
-			$func($i);
+			$func(new Number($i));
 			$i -= $steps-1;
 		}
 	}
