@@ -306,7 +306,7 @@ class String extends Object {
 	}
 	public function toCharArray() {
 		$chars = array();
-		for($i = 0; $i < str_len($this->value); $i++) {
+		for($i = 0; $i < strlen($this->value); $i++) {
 			array_push($chars, substr($this->value, $i, 1));
 		}
 		return new ArrayList($chars);
