@@ -71,6 +71,7 @@ class Object {
 					$else();
 				}
 			}
+			return $this;
 		}
 		else {
 			return ($this->data === $val);
