@@ -362,3 +362,103 @@ class ArrayList extends Object {
 		}
 	}
 }
+
+class ArrayList2 implements ArrayAccess{
+ 	private $array = array();
+	private $type = '';
+	public function __construct($type) {
+		$this->type = $type;
+	}
+	public function Count() {
+		return count($this->array);
+	}
+	public function Item($i) {
+		return $this->array[$i];
+	}
+	
+	public function offsetSet($offset, $value) {
+        if ($this->type === gettype($value) || $this->type === "all") {
+			if (is_int($this->offset)) {
+				$this->array[$this->offset] = $value;
+			} else {
+				$this->array[] = $value;
+			}
+		}
+    }
+    public function offsetExists($offset) {
+        return isset($this->array[$offset]);
+    }
+    public function offsetUnset($offset) {
+        unset($this->array[$offset]);
+    }
+    public function offsetGet($offset) {
+        return isset($this->array[$offset]) ? $this->array[$offset] : null;
+    }
+	public function Add($value) {
+		$this->offsetSet(null, $value);
+	}
+	public function AddRange() {
+		$arr = func_get_args();
+		for($i = 0; $i < count($arr); $i++) {
+			$this->offsetSet(null, $arr[$i]);
+		}
+	}
+	public function Clear() {
+		$this->array = array();
+	}
+	public function Contains($item) {
+		return (in_array($item, $this->array));
+	}
+	public function Each($func) {
+		foreach ($this->array as $index => $value) {
+			$func($value, $index);
+		}
+	}
+	public function GetRange($index, $count) {
+		$a = new ArrayList($this->type);
+		$a->AddRange(array_slice($this->array, $index, $count));
+		return $a;
+	}
+	public function Insert($index, $value) {
+		$this->offsetSet($index, $value);
+	}
+	public function InsertRange($index, $value) {
+		$arr = func_get_args();
+		for($i = 0; $i < count($arr); $i++) {
+			$this->offsetSet($index + $i, $arr[$i]);
+		}
+	}
+	public function Remove($item) {
+		$this->array = array_splice($this->array, array_search($item, $this->array), 1);
+	}
+	public function RemoveAll($func) {
+		foreach($this->array as $item) {
+			if ($func($item)) {
+				$this->array = array_splice($this->array, array_search($item, $this->array), 1);
+			}
+		}
+	}
+	public function RemoveAt($index) {
+		unset($this->array[$index]);
+	}
+	public function RemoveRange($index, $count) {
+		for($i = $count-1; $i >= $index; $i--) {
+			unset($this->array[$i]);
+		}
+	}
+	public function ToArray() {
+		return $this->array;
+	}
+	public function TrueForAll($func) {
+		$returning = true;
+		foreach ($this->array as $item) {
+			$returning = $func($item);
+			
+			if ($returning === false) {
+				return false;
+			}
+		}
+		return true;
+	}
+}
+
